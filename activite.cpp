@@ -1,0 +1,135 @@
+#include "activite.h"
+#include <QString>
+#include <QDate>
+#include <QTime>
+#include <QSqlQuery>
+#include <QSqlQueryModel>
+#include <QDebug>
+
+activite::activite()
+{
+    id="";
+    nom="";
+    day="";
+    starttime="";
+    endtime="";
+    nomcat="";
+}
+
+activite::activite(QString id , QString nom, QString day, QString starttime, QString endtime, QString nomcat)
+{
+    this->id = id;
+    this->nom = nom;
+    this->day = day;
+    this->starttime=starttime;
+    this->endtime=endtime;
+    this->nomcat=nomcat;
+}
+
+QString activite::get_id()
+{
+    return id;
+}
+QString activite::get_nom()
+{
+    return nom;
+}
+QString activite::get_DAY()
+{
+    return day;
+}
+QString activite::get_STARTTIME()
+{
+    return starttime;
+}
+QString activite::get_ENDTIME()
+{
+    return endtime;
+}
+QString activite::get_NOMCAT()
+{
+    return nomcat;
+}
+bool activite::add_activite()
+{
+    QSqlQuery query;
+
+    query.prepare("INSERT INTO ACTIVITE (ID,NOM,DAY,STARTTIME,ENDTIME,NOMCAT)"
+                  "VALUES(:id,:nom,:day,:starttime,:endtime,:nomcat)");
+    query.bindValue(":id",id);
+    query.bindValue(":nom",nom);
+    query.bindValue(":day",day);
+    query.bindValue(":starttime",starttime);
+    query.bindValue(":endtime",endtime);
+    query.bindValue(":nomcat",nomcat);
+
+
+
+    return    query.exec();
+}
+QSqlQueryModel * activite::show()
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("SELECT NOM,DAY,STARTTIME,ENDTIME FROM activite");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Day"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Start Time"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("End Time"));
+        return model;
+}
+QSqlQueryModel * activite::show_cat(const QString &nom)
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("SELECT NOM,DAY,STARTTIME,ENDTIME,NOMCAT FROM activite WHERE (NOMCAT= '"+nom+"')");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Day"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Start Time"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("End Time"));
+
+        return model;
+}
+bool activite::modify(){
+    QSqlQuery query;
+    query.prepare("UPDATE ACTIVITE SET ID= :ID, NOM= :NOM, DAY= :DAY, STARTTIME= :STARTTIME, ENDTIME= :ENDTIME, NOMCAT= :NOMCAT WHERE ID= :ID");
+    query.bindValue(":ID",id);
+    query.bindValue(":NOM",nom);
+    query.bindValue(":DAY",day);
+    query.bindValue(":STARTTIME",starttime);
+    query.bindValue(":ENDTIME",endtime);
+    query.bindValue(":NOMCAT",nomcat);
+    return query.exec();
+}
+bool activite::remove(QString id)
+{
+QSqlQuery query;
+QString toSearch= id;
+query.prepare("DELETE FROM ACTIVITE WHERE NOM = :NOM");
+query.bindValue(":NOM", toSearch);
+return    query.exec();
+}
+QSqlQueryModel * activite::show_act(const QString &day , const QString &nom)
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("SELECT NOM,DAY,STARTTIME,ENDTIME,NOMCAT FROM activite WHERE (DAY LIKE '"+day+"%')AND (NOMCAT= '"+nom+"')");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Day"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Start Time"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("End Time"));
+
+        return model;
+}
+QSqlQueryModel * activite::show_asc(const QString &day , const QString &nom)
+{
+    QSqlQueryModel * model= new QSqlQueryModel();
+    model->setQuery("SELECT NOM,DAY,STARTTIME,ENDTIME,NOMCAT FROM activite WHERE (DAY LIKE '"+day+"%')AND (NOMCAT= '"+nom+"')ORDER BY NOM ASC");
+
+    model->setHeaderData(0, Qt::Horizontal, QObject::tr("Name"));
+    model->setHeaderData(1, Qt::Horizontal, QObject::tr("Day"));
+    model->setHeaderData(2, Qt::Horizontal, QObject::tr("Start Time"));
+    model->setHeaderData(3, Qt::Horizontal, QObject::tr("End Time"));
+
+        return model;
+}

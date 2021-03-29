@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/IMG">
+        <file>IMG/app name.png</file>
+        <file>IMG/icons8-planner-96 (1).png</file>
+        <file>IMG/logo 2.png</file>
+        <file>IMG/icons8-plus-480.png</file>
+        <file>IMG/icons8-search-512.png</file>
+        <file>IMG/icons8-arrow-pointing-left-80.png</file>
+        <file>IMG/icons8-woman-athlete-100.png</file>
+        <file>IMG/icons8-clock-512.png</file>
+        <file>IMG/icons8-planner-52.png</file>
+        <file>IMG/icons8-checked-480 (2).png</file>
+        <file>IMG/icons8-edit-480.png</file>
+        <file>IMG/icons8-trash-208.png</file>
+        <file>IMG/icons8-back-52.png</file>
+        <file>IMG/icons8-filter-and-sort-90.png</file>
+    </qresource>
+</RCC>

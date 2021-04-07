@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
 }
 
 
-
+//Add Object
 void MainWindow::on_pushButtonAjouterObjet_clicked()
 {
     QString ID=ui->lineEditIdObjet->text();

@@ -27,11 +27,20 @@ public:
      bool remove(QString);
      QSqlQueryModel * show_act(const QString & , const QString &);
      QSqlQueryModel * show_asc(const QString & , const QString &);
+     void show_notification(QString, QString);
+     QSqlQuery stat_1(int &);
+     QSqlQuery stat_2(int &);
+     QSqlQuery stat_3(int &);
+     QSqlQuery stat_4(int &);
+     QSqlQuery stat_5(int &);
+     QSqlQuery stat_6(int &);
+     QSqlQuery stat_7(int &);
 private:
      QString id;
     QString nom;
     QString day;
     QString starttime,endtime, nomcat;
+    QString titre , text ;
 
 };
 

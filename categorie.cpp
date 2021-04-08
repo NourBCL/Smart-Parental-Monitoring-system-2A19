@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QDebug>
+#include <QSystemTrayIcon>
 
 categorie::categorie()
 {
@@ -84,4 +85,13 @@ QSqlQueryModel * categorie::show_Asc()
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("Nom"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Description"));
         return model;
+}
+void categorie::show_notification(QString titre,QString text)
+{
+    this->text=text;
+      this->titre=titre;
+    QSystemTrayIcon *notifyIcon = new QSystemTrayIcon;
+    notifyIcon->setIcon(QIcon(":/IMG/IMG/logo 2.png"));
+    notifyIcon->show();
+    notifyIcon->showMessage(titre,text,QSystemTrayIcon::Information,15000);
 }

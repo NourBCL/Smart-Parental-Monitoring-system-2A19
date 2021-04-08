@@ -4,6 +4,10 @@
 #include <QMainWindow>
 #include "activite.h"
 #include "categorie.h"
+#include <QtCharts>
+#include <QChartView>
+#include <QPieSeries>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -98,6 +102,21 @@ private slots:
     void on_tableView_8_clicked(const QModelIndex &index);
 
     void on_toolButton_52_clicked();
+    void pdf();
+
+    void on_toolButton_6_clicked();
+
+    void on_toolButton_23_clicked();
+
+    void on_toolButton_24_clicked();
+
+    void on_toolButton_17_clicked();
+
+    void on_toolButton_26_clicked();
+
+    void on_toolButton_25_clicked();
+
+    void on_toolButton_27_clicked();
 
 private:
     Ui::MainWindow *ui;

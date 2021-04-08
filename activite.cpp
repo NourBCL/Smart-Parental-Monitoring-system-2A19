@@ -5,7 +5,7 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QDebug>
-
+#include <QSystemTrayIcon>
 activite::activite()
 {
     id="";
@@ -133,3 +133,83 @@ QSqlQueryModel * activite::show_asc(const QString &day , const QString &nom)
 
         return model;
 }
+void activite::show_notification(QString titre,QString text)
+{
+    this->text=text;
+      this->titre=titre;
+    QSystemTrayIcon *notifyIcon = new QSystemTrayIcon;
+    notifyIcon->setIcon(QIcon(":/IMG/IMG/logo 2.png"));
+    notifyIcon->show();
+    notifyIcon->showMessage(titre,text,QSystemTrayIcon::Information,15000);
+}
+QSqlQuery activite::stat_1(int &stat1)
+{
+    stat1=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'lun%'");
+    while(query1.next())
+    {
+        stat1=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_2(int &stat2)
+{
+    stat2=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'mar%'");
+    while(query1.next())
+    {
+        stat2=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_3(int &stat3)
+{
+    stat3=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'mer%'");
+    while(query1.next())
+    {
+        stat3=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_4(int &stat4)
+{
+    stat4=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'jeu%'");
+    while(query1.next())
+    {
+        stat4=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_5(int &stat5)
+{
+    stat5=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'ven%'");
+    while(query1.next())
+    {
+        stat5=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_6(int &stat6)
+{
+    stat6=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'sam%'");
+    while(query1.next())
+    {
+        stat6=query1.value(0).toInt();
+    }
+    return query1;
+}
+QSqlQuery activite::stat_7(int &stat7)
+{
+    stat7=0;
+    QSqlQuery query1("SELECT COUNT(*) FROM ACTIVITE WHERE DAY LIKE 'dim%'");
+    while(query1.next())
+    {
+        stat7=query1.value(0).toInt();
+    }
+    return query1;
+}
+

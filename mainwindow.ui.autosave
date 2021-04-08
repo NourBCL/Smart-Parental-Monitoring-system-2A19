@@ -28,7 +28,7 @@
 font: 10pt &quot;Comic Sans MS&quot;;l</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="page">
      <property name="styleSheet">

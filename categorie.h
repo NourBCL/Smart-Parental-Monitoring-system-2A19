@@ -21,9 +21,10 @@ public:
      bool modify_categorie();
      QSqlQueryModel * search(const QString&);
      QSqlQueryModel * show_Asc();
+     void show_notification(QString, QString);
 private:
     QString id,nom,description;
-
+    QString titre , text ;
 };
 
 #endif // CATEGORIE_H

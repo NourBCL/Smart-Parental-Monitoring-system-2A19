@@ -3,6 +3,8 @@
 #include "ui_mainwindow.h"
 #include"categorie.h"
 #include "activite.h"
+#include "ingredient.h"
+#include "arduino.h"
 #include <QDateEdit>
 #include <QDate>
 #include <QModelIndex>
@@ -18,6 +20,16 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+        int ret=A.connect_arduino(); // lancer la connexion à arduino
+        switch(ret){
+        case(0):qDebug()<< "arduino is available and connected to : "<< A.getarduino_port_name();
+            break;
+        case(1):qDebug() << "arduino is available but not connected to :" <<A.getarduino_port_name();
+           break;
+        case(-1):qDebug() << "arduino is not available";
+        }
+         QObject::connect(A.getserial(),SIGNAL(readyRead()),this,SLOT(update_label())); // permet de lancer
+         //le slot update_label suite à la reception du signal readyRead (reception des données).
 }
 
 MainWindow::~MainWindow()
@@ -25,6 +37,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::update_label()
+{
+    data=A.read_from_arduino();
+
+    if(data=="1")
+
+        ui->label_3->setText("ON"); // si les données reçues de arduino via la liaison série sont égales à 1
+    // alors afficher ON
+
+    else if (data=="0")
+
+        ui->label_3->setText("OFF");   // si les données reçues de arduino via la liaison série sont égales à 0
+     //alors afficher ON
+}
 
 void MainWindow::on_toolButton_clicked()
 {
@@ -873,4 +899,287 @@ void MainWindow::on_toolButton_27_clicked()
 void MainWindow::on_toolButton_26_clicked()
 {
     ui->stackedWidget ->setCurrentIndex(0);
+}
+
+void MainWindow::on_toolButton_30_clicked()
+{
+    ui->stackedWidget ->setCurrentIndex(0);
+}
+
+void MainWindow::on_toolButton_28_clicked()
+{
+    QString id= ui->lineEdit_Id_4->text();
+    QString nom= ui->lineEdit_name_4->text();
+    QString quantite= ui->quantite->text();
+    QString type= ui->type->text();
+
+
+
+    int x=0;
+    if(id=="")
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("ID can't be empty"), QMessageBox::Ok);
+    x++;
+    }
+    else if(nom=="")
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("Name cant' be empty"), QMessageBox::Ok);
+    x++;
+    }
+    else if(quantite=="")
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("Quantity can't be empty"), QMessageBox::Ok);
+    x++;
+    }
+    for (int i =0;i<id.size();i++)
+    {
+        if (id[i].isLetter())
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("ID must contain only numbers"), QMessageBox::Ok);
+    x++;
+    }
+        else if (id[i].isDigit())
+    {
+    //qDebug("true");
+    }
+
+    }
+
+    for (int i =0;i<nom.size();i++)
+    {
+        if (nom[i].isDigit())
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("Name must contain only letters"), QMessageBox::Ok);
+    x++;
+    }
+        else if (nom[i].isLetter())
+    {
+    //qDebug("true");
+    nom.replace(0, 1, nom[0].toUpper());
+    }
+    }
+    for (int i =0;i<quantite.size();i++)
+    {
+        if (quantite[i].isLetter())
+    {
+    QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+    QObject::tr("Quantity must contain only numbers"), QMessageBox::Ok);
+    x++;
+    }
+        else if (quantite[i].isDigit())
+    {
+    //qDebug("true");
+    }
+    }
+    if (x==0)
+    {
+
+        ingredient c(id,nom,quantite,type);
+
+        bool test =c.add_ingredient();
+        if(test)
+            {
+                ingredient().show_notification("Add ingredient","ingredient added successfully");
+            }
+        ui->lineEdit_Id_4->clear();
+        ui->lineEdit_name_4->clear();
+        ui->quantite->clear();
+        ui->type->clear();
+        ui->stackedWidget ->setCurrentIndex(10);
+        ui->ingTab->setModel(ingTab.show_ingredient());
+    }
+
+}
+
+
+
+void MainWindow::on_toolButton_79_clicked()
+{
+    QString nom = ui->lineEdit_11->text();
+        ingTab.remove_ingredient(nom);
+        ui->ingTab->setModel(ingTab.show_ingredient());
+        ui->lineEdit_11->clear();
+}
+
+void MainWindow::on_toolButton_130_clicked()
+{
+    QString id= ui->ingID->text();
+    QString nom= ui->ingNAME->text();
+    QString quantite= ui->ingQUANTITY->text();
+    QString type= ui->ingTYPE->text();
+
+
+
+    int x=0;
+    if(quantite=="")
+        {
+        QMessageBox::critical(nullptr, QObject::tr("WARNING"),
+        QObject::tr("Quantity can't be empty"), QMessageBox::Ok);
+        x++;
+        }
+    if (x==0)
+    {
+        ingredient c(id,nom,quantite,type);
+        bool test=c.modify_ingredient();
+        if(test)
+            {
+                categorie().show_notification("Modify ingredient","ingredient modified successfully");
+            }
+         ui->id->clear();
+         ui->nom->clear();
+         ui->quantite->clear();
+         ui->type->clear();
+         ui->stackedWidget->setCurrentIndex(10);
+         ui->ingTab->setModel(ingTab.show_ingredient());
+    }
+}
+
+
+void MainWindow::on_toolButton_78_clicked()
+{
+    ui->ingTab->setModel(ingTab.show_Asc());
+}
+
+void MainWindow::on_toolButton_77_clicked()
+{
+    QString name=ui->lineEdit_toChange_3->text();
+        ui->ingTab->setModel(ingTab.search(name));
+}
+
+void MainWindow::on_toolButton_81_clicked()
+{
+    QString val=ui->lineEdit_11->text();
+        QSqlQuery query;
+        query.prepare("SELECT * FROM INGREDIENT WHERE NOM = '"+val+"'");
+        if(query.exec())
+        {
+            while (query.next())
+            {
+                ui->stackedWidget->setCurrentIndex(11);
+                ui->ingID->setText(query.value(0).toString());
+                ui->ingNAME->setText(query.value(1).toString());
+                ui->ingQUANTITY->setText(query.value(2).toString());
+                ui->ingTYPE->setText(query.value(3).toString());
+            }
+        }
+}
+
+
+
+void MainWindow::on_toolButton_129_clicked()
+{
+    ui->stackedWidget ->setCurrentIndex(0);
+}
+
+void MainWindow::on_toolButton_83_clicked()
+{
+    ui->stackedWidget ->setCurrentIndex(0);
+}
+
+void MainWindow::on_toolButton_3_clicked()
+{
+    ui->stackedWidget ->setCurrentIndex(10);
+    ui->ingTab->setModel(ingTab.show_ingredient());
+}
+
+
+void MainWindow::on_toolButton_82_clicked()
+{
+    ui->stackedWidget ->setCurrentIndex(9);
+}
+
+void MainWindow::on_ingTab_activated(const QModelIndex &index)
+{
+    QString val=ui->ingTab->model()->data(index).toString();
+        ui->lineEdit_11->setText(val);
+}
+
+void MainWindow::pdf_ing()
+{
+    QString strStream;
+    QString currentDate = QDateTime().currentDateTime().toString();
+    QTextStream out(&strStream);
+    const int rowCount = ui->ingTab->model()->rowCount();
+    const int columnCount = ui->ingTab->model()->columnCount();
+    out <<
+     "<html>\n"
+    "<head>\n"
+    "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+    <<QString("<title>%1</title>\n").arg("strTitle")
+    <<"</head>\n"
+    "<body bgcolor=#ffffff link=#5000A0>\n"
+     <<QString(currentDate)
+    <<//"<align='right'> " << datefich << "</align>"
+    "<center> <img src="":/IMG/IMG/logo2.png"" width=""100"" height=""100"" > <br> <br><H1>LIST OF ACTIVITIES</H1> <br> <br><table border=1 cellspacing=0 cellpadding=2>\n";
+    // headers
+    out << "<thead><tr bgcolor=#f0f0f0> <th>Numero</th>";
+    for (int column = 0; column < columnCount; column++)
+    if (!ui->ingTab->isColumnHidden(column))
+    out << QString("<th>%1</th>").arg(ui->ingTab->model()->headerData(column, Qt::Horizontal).toString());
+    out << "</tr></thead>\n";
+    // data table
+    for (int row = 0; row < rowCount; row++)
+    {
+    out << "<tr> <td bkcolor=0>" << row+1 <<"</td>";
+    for (int column = 0; column < columnCount; column++)
+    {
+    if (!ui->ingTab->isColumnHidden(column))
+    {
+    QString data = ui->ingTab->model()->data(ui->ingTab->model()->index(row, column)).toString().simplified();
+    out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+    }
+    }
+    out << "</tr>\n";
+    }
+    out <<  "</table> </center>\n"
+         "<br> <br> <br> <br>"
+    "</body>\n"
+    "<footer>\n"
+            "<div class = ""container"">"
+                "<div class = ""row"">"
+                    "<div>"
+                        "<div><img src="":/IMG/IMG/icons8-facebook-30.png""> <span>Control Patrol TN </div>\n"
+                        "<br>"
+                        "<div><img src="":/IMG/IMG/icons8-instagram-30.png""> <span>@controlpatrol.tn </div>\n"
+                        "<p>Generated from : Control Patrol.exe "
+                    "</div>"
+                "</div>"
+            "</div>"
+    "</footer>\n"
+    "</html>\n";
+    QString filter = "pdf (*.pdf) ";
+    QString fileName = QFileDialog::getSaveFileName(this, "save in", QDir::homePath(),filter);
+    if(fileName.isEmpty()&&fileName.isNull())
+    {
+        ingredient().show_notification("error","exporting is cancelled");
+    }
+    else
+    {
+    QPrinter printer (QPrinter::PrinterResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setPaperSize(QPrinter::A4);
+    printer.setOutputFileName(fileName);
+    QTextDocument doc;
+    doc.setHtml(strStream);
+    doc.setPageSize(printer.pageRect().size()); // This is necessary if you want to hide the page number
+    doc.print(&printer);
+    ingredient().show_notification("PDF creation","File created successfully");
+    }
+}
+
+void MainWindow::on_toolButton_32_clicked()
+{
+    if(ui->ingTab->verticalHeader()->count()==0)
+            {
+                ingredient().show_notification("error","no data to export");
+            }
+            else
+            {
+                pdf_ing();
+            }
 }

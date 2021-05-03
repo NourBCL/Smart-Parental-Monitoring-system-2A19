@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include "activite.h"
 #include "categorie.h"
+#include "ingredient.h"
+#include "arduino.h"
 #include <QtCharts>
 #include <QChartView>
 #include <QPieSeries>
@@ -20,7 +22,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
 private slots:
+    void update_label();   // slot permettant la mise à jour du label état de la lampe 1,
+        // ce slot est lancé à chaque réception d'un message de Arduino
     void on_toolButton_clicked();
 
     void on_toolButton_4_clicked();
@@ -103,6 +108,7 @@ private slots:
 
     void on_toolButton_52_clicked();
     void pdf();
+    void pdf_ing();
 
     void on_toolButton_6_clicked();
 
@@ -118,9 +124,39 @@ private slots:
 
     void on_toolButton_27_clicked();
 
+    void on_toolButton_30_clicked();
+
+    void on_toolButton_28_clicked();
+
+    void on_toolButton_79_clicked();
+
+    void on_toolButton_130_clicked();
+
+    void on_toolButton_77_clicked();
+
+    void on_toolButton_78_clicked();
+
+    void on_toolButton_81_clicked();
+
+    void on_toolButton_129_clicked();
+
+    void on_toolButton_83_clicked();
+
+    void on_toolButton_3_clicked();
+
+    void on_toolButton_82_clicked();
+
+    void on_ingTab_activated(const QModelIndex &index);
+
+    void on_toolButton_32_clicked();
+
 private:
     Ui::MainWindow *ui;
     activite actTable;
     categorie tabCat;
+    ingredient ingTab;
+    QByteArray data; // variable contenant les données reçues
+
+        Arduino A; // objet temporaire
 };
 #endif // MAINWINDOW_H

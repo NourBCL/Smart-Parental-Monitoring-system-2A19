@@ -1,4 +1,4 @@
-QT       += core gui sql multimedia multimediawidgets printsupport charts
+QT       += core gui sql multimedia multimediawidgets printsupport charts serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,15 +17,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     activite.cpp \
+    arduino.cpp \
     categorie.cpp \
     connexion.cpp \
+    ingredient.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     activite.h \
+    arduino.h \
     categorie.h \
     connexion.h \
+    ingredient.h \
     mainwindow.h
 
 FORMS += \

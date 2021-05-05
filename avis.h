@@ -24,6 +24,7 @@ public:
   QSqlQueryModel * trie_id_avis();
   QSqlQueryModel * recherche_avis(QString avis);
   bool supprimer(int);
+  int total_avis();
 private:
     int id ;
     QString avis, composition_avis;

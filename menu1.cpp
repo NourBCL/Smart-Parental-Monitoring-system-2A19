@@ -73,5 +73,18 @@ bool Menu1::modifier() {
     return query.exec();
 
 }
+int Menu1::total_menu1() {
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM MENU1");
+
+     query.exec();
+     int rows = 0;
+     while(query.next()) {
+         rows = query.value(0).toInt();
+     }
+
+     return rows ;
+}
+
 
 

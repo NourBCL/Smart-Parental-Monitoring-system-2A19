@@ -29,6 +29,8 @@ private slots:
 
     void on_pb_pdf_menu_clicked();
 
+    void on_pushButton_2_clicked();
+
 private:
     Ui::gestion_menu *ui;
     Menu1 * menu1;

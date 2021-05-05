@@ -112,4 +112,16 @@ QSqlQueryModel * Avis::recherche_avis(QString avis)
     return model;
 
 }
+int Avis::total_avis() {
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM AVIS");
+
+     query.exec();
+     int rows = 0;
+     while(query.next()) {
+         rows = query.value(0).toInt();
+     }
+
+     return rows ;
+}
 

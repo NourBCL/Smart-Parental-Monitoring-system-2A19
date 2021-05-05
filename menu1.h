@@ -22,6 +22,8 @@ public:
     bool modifier();
   QSqlQueryModel * afficher();
   bool supprimer(int);
+  int total_menu1();
+
 private:
     int id ;
     QString nom, composition;

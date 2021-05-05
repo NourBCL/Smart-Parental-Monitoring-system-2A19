@@ -8,6 +8,13 @@
 #include <QUrl>
 #include<QPixmap>
 #include<QSqlQuery>
+#include <QMessageBox>
+#include <QDebug>
+#include <QPixmap>
+#include <QDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QTextDocument>
 
 gestion_menu::gestion_menu(QWidget *parent) :
     QWidget(parent),
@@ -144,4 +151,55 @@ void gestion_menu::on_pb_pdf_menu_clicked()
                                   {
                                        painter.end();
                                   }
+}
+
+void gestion_menu::on_pushButton_2_clicked()
+{  QString strStream;
+    QTextStream out(&strStream);
+
+
+
+    const int rowCount = ui->tab_menu1->model()->rowCount();
+    const int columnCount = ui->tab_menu1->model()->columnCount();
+
+    out <<  "<html>\n"
+        "<head>\n"
+
+        "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+        <<  QString("<title>%60 les postes</title>\n").arg("poste")
+        <<  "</head>\n"
+        "<body bgcolor=#ffffff link=#5000A0>\n"
+        "<table border=1 cellspacing=0 cellpadding=2>\n";
+    out << "<thead><tr bgcolor=#f0f0f0>";
+    for (int column = 0; column < columnCount; column++)
+        if (! ui->tab_menu1->isColumnHidden(column))
+            out << QString("<th>%1</th>").arg(ui->tab_menu1->model()->headerData(column, Qt::Horizontal).toString());
+    out << "</tr></thead>\n";
+
+    for (int row = 0; row < rowCount; row++) {
+        out << "<tr>";
+        for (int column = 0; column < columnCount; column++) {
+            if (!ui->tab_menu1->isColumnHidden(column)) {
+                QString data = ui->tab_menu1->model()->data(ui->tab_menu1->model()->index(row, column)).toString().simplified();
+                out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+            }
+        }
+        out << "</tr>\n";
+    }
+    out <<  "</table>\n"
+        "</body>\n"
+        "</html>\n";
+
+    QTextDocument *document = new QTextDocument();
+    document->setHtml(strStream);
+
+    QPrinter printer;
+
+    QPrintDialog *dialog = new QPrintDialog(&printer, NULL);
+    if (dialog->exec() == QDialog::Accepted) {
+        document->print(&printer);
+    }
+
+    delete document;
+
 }

@@ -2,6 +2,7 @@
 #include "ui_gestion_avis.h"
 #include "avis.h"
 #include <QMessageBox>
+#include"statistics.h"
 
 
 gestion_avis::gestion_avis(QWidget *parent) :
@@ -103,4 +104,14 @@ void gestion_avis::on_pushButton_2_clicked()
     QString text_a_rechercher = ui->searchtxt->text();
 
     ui->tab_avis->setModel(avis->recherche_avis(text_a_rechercher));
+}
+
+void gestion_avis::on_pushButton_3_clicked()
+{
+
+
+        statistics *g = new statistics(this);
+        g->show();
+
+
 }

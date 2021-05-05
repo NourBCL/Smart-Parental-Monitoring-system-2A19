@@ -3,7 +3,7 @@
 # Project created by QtCreator 2018-10-26T21:45:23
 #
 #-------------------------------------------------
-
+QT       += sql core gui charts sql printsupport network
 QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -31,7 +31,8 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     connection.cpp \
-    menu1.cpp
+    menu1.cpp \
+    statistics.cpp
 
 HEADERS += \
     avis.h \
@@ -39,12 +40,14 @@ HEADERS += \
     gestion_menu.h \
         mainwindow.h \
     connection.h \
-    menu1.h
+    menu1.h \
+    statistics.h
 
 FORMS += \
         gestion_avis.ui \
         gestion_menu.ui \
-        mainwindow.ui
+        mainwindow.ui \
+        statistics.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

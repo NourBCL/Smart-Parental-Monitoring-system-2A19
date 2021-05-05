@@ -1115,7 +1115,7 @@ void MainWindow::pdf_ing()
     "<body bgcolor=#ffffff link=#5000A0>\n"
      <<QString(currentDate)
     <<//"<align='right'> " << datefich << "</align>"
-    "<center> <img src="":/IMG/IMG/logo2.png"" width=""100"" height=""100"" > <br> <br><H1>LIST OF ACTIVITIES</H1> <br> <br><table border=1 cellspacing=0 cellpadding=2>\n";
+    "<center> <img src="":/IMG/IMG/logo2.png"" width=""100"" height=""100"" > <br> <br><H1>LIST OF INGREDIENTS</H1> <br> <br><table border=1 cellspacing=0 cellpadding=2>\n";
     // headers
     out << "<thead><tr bgcolor=#f0f0f0> <th>Numero</th>";
     for (int column = 0; column < columnCount; column++)

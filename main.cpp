@@ -1,15 +1,21 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QMessageBox>
-#include <QApplication>
-#include "connexion.h"
-
+#include<QApplication>
+#include<QFile>
+#include "connection.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+
+    QFile styleSheetFile("C:/Users/ASUS/Desktop/Code_source_Atelier_Connexion/Atelier_Connexion/Adaptic.qss");
+        styleSheetFile.open(QFile::ReadOnly);
+        QString styleSheet=QLatin1String(styleSheetFile.readAll());
+        a.setStyleSheet(styleSheet);
+
     MainWindow w;
-    w.show();
-    Connexion c;
+    Connection c;
     bool test=c.createconnect();
     if(test)
     {w.show();
@@ -22,5 +28,8 @@ int main(int argc, char *argv[])
         QMessageBox::critical(nullptr, QObject::tr("database is not open"),
                     QObject::tr("connection failed.\n"
                                 "Click Cancel to exit."), QMessageBox::Cancel);
+
+
+
     return a.exec();
 }
